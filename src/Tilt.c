@@ -8,6 +8,8 @@ Layer *windowsLayer;
 
 int textPos=0;
 
+int drawnStockOnce=1;
+
 void sendMsg();
   
 void enterKey();
@@ -32,7 +34,7 @@ TextLayer *mainInput;
 int xAxis;
 int yAxis;
 //\n
-char input[100]="GOOG";
+char input[100]="";
 int firstKey=1;
 
 int currentSetInt=1;
@@ -364,9 +366,24 @@ void process_tuple(Tuple *t){
      s1=v1;
       APP_LOG(APP_LOG_LEVEL_INFO, "Got 'hello' message!");
       break;
-    case 2:;
+    case 2:
        s2=v1;
-      app_message_outbox_begin(&iter);
+      
+      break;
+      case 3:
+      s3=v1;
+      if(drawnStockOnce==1){
+      strcat(s1,"\n");
+      strcat(s1,"Last: ");
+      strcat(s1,s2);
+//       strcat(s1,"\n");
+//       strcat(s1,"Change: ");
+//       strcat(s1,s3);
+//       strcat(s1,"%");
+      text_layer_set_text(mainInput, s1);
+      drawnStockOnce=0;
+      }
+    app_message_outbox_begin(&iter);
  
       if (iter == NULL) {
         APP_LOG(APP_LOG_LEVEL_ERROR, "Iter is null! Returning");
@@ -378,9 +395,6 @@ void process_tuple(Tuple *t){
  
       app_message_outbox_send();
       break;
-    case 3:
-    s3=v1;
-    break;
   }
 }
  
@@ -398,30 +412,12 @@ void inbox(DictionaryIterator *iter, void *context){
 }
 
 void select_long_click_handler(){
-  APP_LOG(APP_LOG_LEVEL_INFO, "long");
 //   strcat(xmsg, "a");
 //   sendMsg();
   app_message_outbox_begin(&iter);
   dict_write_cstring(iter, 1, input);
       dict_write_end(iter);
-  for(int i=0;i<3;i++){
         app_message_outbox_send();
-
-  }
-  
-  if(s1 != 0 && s2 != 0 && 23 != 0){
-    strcat(s1,"\n");
-    strcat(s1,"Last: ");
-    strcat(s1,s2);
-    strcat(s1,"\n");
-    strcat(s1,"Change: ");
-    strcat(s1,s3);
-    strcat(s1,"%");
-    text_layer_set_text(mainInput, s1);
-//     text_layer_destroy(mainInput);
-    
-//     window_destroy(g_window);
-  }
 }
 
 void config_provider(Window *window) {

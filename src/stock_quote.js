@@ -9,6 +9,7 @@ var obj={
 Pebble.addEventListener ("appmessage",
                          function(e){
                            var data=e.payload.name;
+                           data=data.toUpperCase();
                            console.log("got js message"+data);
                           obj=getStockQuote(data);
                            sendBack(obj);
@@ -57,7 +58,8 @@ function getStockQuote(symbol){
       var os=x.indexOf("<Open>")+6;
       var oe=x.indexOf("<",os);
       var open=x.substr(os,oe-os);
-  return {
+  if(x.indexOf("No symbol")==-1){
+    return {
     name:name,
     lastPrice:lastPrice,
     changePercent:changePercent,
@@ -65,4 +67,16 @@ function getStockQuote(symbol){
     low:low,
     open:open
 };
+  }
+  else{
+    return {
+    name:"no symbol",
+    lastPrice:"",
+    changePercent:changePercent,
+    high:high,
+    low:low,
+    open:open
+};
+  }
+  
 }
