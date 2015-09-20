@@ -1,0 +1,42 @@
+body {
+	background-image: url('http://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-204801.jpg');
+	text-align: center;
+	font-family: 'Quicksand', sans-serif;
+	color: #ffffff;
+}
+
+h1 {
+	color: #ffffff;
+	font-size: 500%;
+	text-align: center;
+	font-family: 'Quicksand', sans-serif;
+	letter-spacing: .05em;
+    text-shadow: 
+      4px 4px 0px #d5d5d5, 
+      7px 7px 0px rgba(0, 0, 0, 0.2);
+}
+
+p{
+	margin-left: 25%;
+	margin-right: 25%;
+	text-align: center;
+	font-size: 120%;
+	border-style: dashed;
+    border-width: 2px;
+	padding: 2%;
+	border-radius: 20px;
+	background-color: rgba(31, 31, 31, 0.5);
+}
+
+h2 {
+	font-size: 200%;
+	font-weight: bolder;
+}
+
+img {
+	border-style: dashed;
+    border-width: 2px;
+	padding: 1%;
+	border-radius: 20px;
+	background-color: rgba(31, 31, 31, 0.5);
+}
