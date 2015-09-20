@@ -1,7 +1,10 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "hello": 0,
+        "testpost": 1
+    },
     "capabilities": [
-        ""
+        "configurable"
     ],
     "companyName": "n-katz@hotmail.com",
     "longName": "Tilt C",
@@ -11,6 +14,10 @@
     },
     "sdkVersion": "3",
     "shortName": "Tilt C",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
     "uuid": "5f077511-c76f-49a2-bca9-8968cb02e40a",
     "versionLabel": "1.0",
     "watchapp": {

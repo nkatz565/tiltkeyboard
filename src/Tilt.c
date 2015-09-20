@@ -1,11 +1,15 @@
 #include <pebble.h>
+  
 
+DictionaryIterator *iter;
 Window *g_window;
 Layer *divider_layer;
 Layer *windowsLayer;
 
 int textPos=0;
 
+void sendMsg();
+  
 void enterKey();
 
 AppTimer *inputTimer = NULL;
@@ -192,7 +196,7 @@ void enterKey(){
 //   append();
   strcat(input, currentSet[selected]);
   firstKey=1;
-//   drawSelected(0);
+   drawSelected(0);
 //   selected=-1;
   text_layer_set_text(mainInput, input);
 
@@ -348,15 +352,74 @@ void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
   }
 }
 
+void process_tuple(Tuple *t){
+  int key = t->key;
+  int value = t->value->int32;
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Got key %d, value %d", key, value);
+  switch(key){
+    case 0:
+      APP_LOG(APP_LOG_LEVEL_INFO, "Got 'hello' message!");
+      break;
+    case 1:;
+      
+      app_message_outbox_begin(&iter);
+ 
+      if (iter == NULL) {
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Iter is null! Returning");
+        return;
+      }
+ 
+      dict_write_cstring(iter, 1, input);
+      dict_write_end(iter);
+ 
+      app_message_outbox_send();
+      break;
+  }
+}
+ 
+void inbox(DictionaryIterator *iter, void *context){
+  Tuple *t = dict_read_first(iter);
+  if(t){
+    process_tuple(t);
+  }
+  while(t != NULL){
+    t = dict_read_next(iter);
+    if(t){
+      process_tuple(t);
+    }
+  }
+}
+
+void select_long_click_handler(){
+  APP_LOG(APP_LOG_LEVEL_INFO, "long");
+//   strcat(xmsg, "a");
+//   sendMsg();
+  app_message_outbox_begin(&iter);
+  dict_write_cstring(iter, 1, input);
+      dict_write_end(iter);
+    app_message_outbox_send();
+
+}
+
 void config_provider(Window *window) {
  // single click 
   window_single_click_subscribe(BUTTON_ID_UP, up_single_click_handler);
   window_single_click_subscribe(BUTTON_ID_SELECT, select_single_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_single_click_handler);
+//long click
+  window_long_click_subscribe(BUTTON_ID_SELECT, 500, select_long_click_handler, NULL);
+}
+
+void sendMsg(){
+  app_message_register_inbox_received(inbox);
+  app_message_open(app_message_inbox_size_maximum(),app_message_outbox_size_maximum());
 
 }
+
+
 void init()
 {
+  
   uint32_t num_samples = 1;
 accel_data_service_subscribe(num_samples, data_handler);
   accel_tap_service_subscribe(tap_handler);
@@ -369,6 +432,10 @@ accel_data_service_subscribe(num_samples, data_handler);
     .load = window_load,
     .unload = window_unload,
   });
+   
+  sendMsg();
+
+
   window_stack_push(g_window, true);
   
 }
