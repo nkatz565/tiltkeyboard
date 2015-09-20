@@ -1,23 +1,38 @@
+var obj={
+    name:"",
+    lastPrice:"",
+    changePercent:"",
+    high:"",
+    low:"",
+    open:""
+};
 Pebble.addEventListener ("appmessage",
                          function(e){
-                           var data=e.payload.testpost;
+                           var data=e.payload.name;
                            console.log("got js message"+data);
-                           getStockQuote(data);
+                          obj=getStockQuote(data);
+                           sendBack(obj);
                          });
 Pebble.addEventListener ("ready",
                          function(e){
                            console.log("This is JS speaking");
-                           Pebble.sendAppMessage({
-                             "testpost":1,
-                           });
+                           
                            var value= localStorage.getItem("hellokey");
                            value++;
                            localStorage.setItem("hellokey",value);
                            console.log("value = "+value);
                          });
 
-  
-
+function sendBack(obj){
+  Pebble.sendAppMessage({
+    "name":obj.name,
+    "lastPrice":obj.lastPrice,
+    "changePercent":obj.changePercent,
+//     "high":obj.high,
+//     "low":obj.low,
+//     "open":obj.open,
+  });
+}
 
 
 function getStockQuote(symbol){
@@ -42,10 +57,12 @@ function getStockQuote(symbol){
       var os=x.indexOf("<Open>")+6;
       var oe=x.indexOf("<",os);
       var open=x.substr(os,oe-os);
-  console.log(name);
-    console.log(lastPrice);
-  console.log(changePercent);
-  console.log(high);
-  console.log(low);
-  console.log(open);
+  return {
+    name:name,
+    lastPrice:lastPrice,
+    changePercent:changePercent,
+    high:high,
+    low:low,
+    open:open
+};
 }

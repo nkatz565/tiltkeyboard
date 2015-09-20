@@ -1,25 +1,27 @@
 {
     "appKeys": {
+        "changePercent": 3,
         "hello": 0,
-        "testpost": 1
+        "high": 4,
+        "lastPrice": 2,
+        "low": 5,
+        "name": 1,
+        "open": 6
     },
     "capabilities": [
         "configurable"
     ],
     "companyName": "n-katz@hotmail.com",
-    "longName": "Tilt C",
+    "longName": "Tilt2Type",
     "projectType": "native",
     "resources": {
         "media": []
     },
-    "sdkVersion": "3",
-    "shortName": "Tilt C",
-    "targetPlatforms": [
-        "aplite",
-        "basalt"
-    ],
-    "uuid": "5f077511-c76f-49a2-bca9-8968cb02e40a",
-    "versionLabel": "1.0",
+    "sdkVersion": "2",
+    "shortName": "Tilt2Type",
+    "uuid": "10e99946-3d67-4897-964b-27a4e7021f9f",
+    "versionCode": 1,
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": false
     }

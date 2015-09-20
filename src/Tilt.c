@@ -12,6 +12,10 @@ void sendMsg();
   
 void enterKey();
 
+char *s1;
+char *s2;
+char *s3;
+
 AppTimer *inputTimer = NULL;
 void rebuildSidebar();
 TextLayer *l1;
@@ -27,8 +31,8 @@ TextLayer *mainInput;
 
 int xAxis;
 int yAxis;
-
-char input[100]="";
+//\n
+char input[100]="GOOG";
 int firstKey=1;
 
 int currentSetInt=1;
@@ -351,17 +355,17 @@ void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
     inputTimer=app_timer_register(1000, enterKey, NULL);  
   }
 }
-
 void process_tuple(Tuple *t){
   int key = t->key;
-  int value = t->value->int32;
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Got key %d, value %d", key, value);
+  char *v1 = t->value->cstring;
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Got key %d %s, value", key,v1);
   switch(key){
-    case 0:
+    case 1:
+     s1=v1;
       APP_LOG(APP_LOG_LEVEL_INFO, "Got 'hello' message!");
       break;
-    case 1:;
-      
+    case 2:;
+       s2=v1;
       app_message_outbox_begin(&iter);
  
       if (iter == NULL) {
@@ -374,6 +378,9 @@ void process_tuple(Tuple *t){
  
       app_message_outbox_send();
       break;
+    case 3:
+    s3=v1;
+    break;
   }
 }
  
@@ -397,8 +404,24 @@ void select_long_click_handler(){
   app_message_outbox_begin(&iter);
   dict_write_cstring(iter, 1, input);
       dict_write_end(iter);
-    app_message_outbox_send();
+  for(int i=0;i<3;i++){
+        app_message_outbox_send();
 
+  }
+  
+  if(s1 != 0 && s2 != 0 && 23 != 0){
+    strcat(s1,"\n");
+    strcat(s1,"Last: ");
+    strcat(s1,s2);
+    strcat(s1,"\n");
+    strcat(s1,"Change: ");
+    strcat(s1,s3);
+    strcat(s1,"%");
+    text_layer_set_text(mainInput, s1);
+//     text_layer_destroy(mainInput);
+    
+//     window_destroy(g_window);
+  }
 }
 
 void config_provider(Window *window) {
