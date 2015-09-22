@@ -2,24 +2,26 @@
   
 
 DictionaryIterator *iter;
-Window *g_window;
-Layer *divider_layer;
-Layer *windowsLayer;
 
-int textPos=0;
+Window *g_window; //main window
+Layer *divider_layer; //layer used to draw the dividers between the letters and the input space
+Layer *windowsLayer; //layer to draw the text on
 
-int drawnStockOnce=1;
+int textPos=0; //keeps track of where the input is for deletion and concatination reasons
+
+int drawnStockOnce=1; 
 
 void sendMsg();
   
-void enterKey();
+void enterKey(); //function for entering keystrokes
 
-char *s1;
+char *s1; 
 char *s2;
 char *s3;
 
-AppTimer *inputTimer = NULL;
-void rebuildSidebar();
+AppTimer *inputTimer = NULL; //used to time when enterKey() should be called
+
+void rebuildSidebar();//function to redraw the letters on the sidebar
 TextLayer *l1;
 TextLayer *l2;
 TextLayer *l3;
@@ -143,8 +145,7 @@ static void data_handler(AccelData *data, uint32_t num_samples) {
 //t = position in array
 //h = highlight 1 or 0
 void createLayer(TextLayer *var,int y, int t, int h){
-  text_layer_destroy(var);
-  var = text_layer_create(GRect(135, y, 16, 16));
+  
       if(h==0){
         text_layer_set_background_color(var, GColorWhite);
         text_layer_set_text_color(var, GColorBlack);
@@ -153,45 +154,45 @@ void createLayer(TextLayer *var,int y, int t, int h){
     text_layer_set_background_color(var, GColorBlack);
         text_layer_set_text_color(var, GColorWhite);
   }
-      layer_add_child(windowsLayer, text_layer_get_layer(var));
+//       layer_add_child(windowsLayer, text_layer_get_layer(var));
       text_layer_set_text(var, currentSet[t]);
 }
 
 void drawSelected(int x){
   if(selected==0){
-    text_layer_destroy(l1);
+//     text_layer_destroy(l1);
     createLayer(l1,0,0,x);
   }
   else if(selected==1){
-    text_layer_destroy(l2);
+//     text_layer_destroy(l2);
     createLayer(l2,16,1,x);
   }
   else if(selected==2){
-    text_layer_destroy(l3);
+//     text_layer_destroy(l3);
     createLayer(l3,32,2,x);
   }
   else if(selected==3){
-    text_layer_destroy(l4);
+//     text_layer_destroy(l4);
     createLayer(l4,53,3,x);
   }
   else if(selected==4){
-    text_layer_destroy(l5);
+//     text_layer_destroy(l5);
     createLayer(l5,69,4,x);
   }
   else if(selected==5){
-    text_layer_destroy(l6);
+//     text_layer_destroy(l6);
     createLayer(l6,85,5,x);
   }
   else if(selected==6){
-    text_layer_destroy(l7);
+//     text_layer_destroy(l7);
     createLayer(l7,106,6,x);
   }
   else if(selected==7){
-    text_layer_destroy(l8);
+//     text_layer_destroy(l8);
     createLayer(l8,122,7,x);
   }
   else if(selected==8){
-    text_layer_destroy(l9);
+//     text_layer_destroy(l9);
     createLayer(l9,138,8,x);
   }
 }
@@ -220,15 +221,26 @@ void initialDraw(Window *window){
   text_layer_set_text_color(mainInput, GColorBlack);
   layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(mainInput));
 
-  createLayer(l1,0,0,0);
-  createLayer(l2,16,1,0);
-  createLayer(l3,32,2,0);
-  createLayer(l4,53,3,0);
-  createLayer(l5,69,4,0);
-  createLayer(l6,85,5,0);
-  createLayer(l7,106,6,0);
-  createLayer(l8,122,7,0);
-  createLayer(l9,138,8,0);
+  l1 = text_layer_create(GRect(135, 0, 16, 16));
+  l2 = text_layer_create(GRect(135, 16, 16, 16));
+  l3 = text_layer_create(GRect(135, 32, 16, 16));
+  l4 = text_layer_create(GRect(135, 53, 16, 16));
+  l5 = text_layer_create(GRect(135, 69, 16, 16));
+  l6 = text_layer_create(GRect(135, 85, 16, 16));
+  l7 = text_layer_create(GRect(135, 106, 16, 16));
+  l8 = text_layer_create(GRect(135, 122, 16, 16));
+  l9 = text_layer_create(GRect(135, 138, 16, 16));
+
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l1));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l2));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l3));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l4));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l5));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l6));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l7));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l8));
+  layer_add_child(window_get_root_layer(g_window), text_layer_get_layer(l9));
+
   divider_layer = layer_create(GRect(0,0,144,168));
   layer_set_update_proc(divider_layer, drawDividers);
   layer_add_child(window_get_root_layer(window), divider_layer);
@@ -239,18 +251,9 @@ void window_load(Window *window)
 }
 
 void rebuildSidebar(){
-  text_layer_destroy(l1);
   createLayer(l1,0,0,0);
-  text_layer_destroy(l2);
   createLayer(l2,16,1,0);
-  text_layer_destroy(l3);
   createLayer(l3,32,2,0);
-  text_layer_destroy(l4);
-  text_layer_destroy(l5);
-  text_layer_destroy(l6);
-  text_layer_destroy(l7);
-  text_layer_destroy(l8);
-  text_layer_destroy(l9);
   createLayer(l4,53,3,0);
   createLayer(l5,69,4,0);
   createLayer(l6,85,5,0);
@@ -331,6 +334,7 @@ void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
+
   if(firstKey==1){
     selected=5;
   }
