@@ -77,7 +77,7 @@ void setCurrentSet(int setNum){
       }  
   }
 }
-static void tap_handler(AccelAxisType axis, int32_t direction) {
+void back_single_click_handler(ClickRecognizerRef recognizer, void *context) {
         input[textPos] = 0;
         textPos--;
         text_layer_set_text(mainInput, input);
@@ -334,8 +334,7 @@ void select_single_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
-
-  if(firstKey==1){
+if(firstKey==1){
     selected=5;
   }
     drawSelected(0);
@@ -344,9 +343,9 @@ void down_single_click_handler(ClickRecognizerRef recognizer, void *context) {
     if(firstKey!=1){
       enterKey();
     }
-    firstKey=0;
     selected=5;
   }
+  firstKey=0;
   selected++;
   if(selected>8){
     selected=6;
@@ -429,6 +428,7 @@ void config_provider(Window *window) {
   window_single_click_subscribe(BUTTON_ID_UP, up_single_click_handler);
   window_single_click_subscribe(BUTTON_ID_SELECT, select_single_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_single_click_handler);
+    window_single_click_subscribe(BUTTON_ID_BACK, back_single_click_handler);
 //long click
   window_long_click_subscribe(BUTTON_ID_SELECT, 500, select_long_click_handler, NULL);
 }
@@ -445,7 +445,6 @@ void init()
   
   uint32_t num_samples = 1;
 accel_data_service_subscribe(num_samples, data_handler);
-  accel_tap_service_subscribe(tap_handler);
 
     g_window = window_create();
     windowsLayer=window_get_root_layer(g_window);
